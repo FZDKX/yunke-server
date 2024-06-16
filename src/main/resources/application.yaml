@@ -1,0 +1,28 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: fzdkx
+  datasource:
+    username: root
+    password: fzdkx
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/yk?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+  data:
+    redis:
+      host: 192.168.16.166
+      password: 123321
+      port: 6379
+      database: 0
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm
+#mybatis配置
+mybatis:
+  # 指定 xml文件
+  mapper-locations: classpath:mappers/*.xml
+  # 启用别名
+  type-aliases-package: com.fzdkx.yunke.bean
+  # 驼峰命名
+  configuration:
+    map-underscore-to-camel-case: true

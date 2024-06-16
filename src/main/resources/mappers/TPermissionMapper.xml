@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fzdkx.yunke.mapper.TPermissionMapper">
+    <resultMap id="BaseResultMap" type="com.fzdkx.yunke.bean.dao.TPermission">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+        <result column="order_no" jdbcType="INTEGER" property="orderNo"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, `name`, code, url, `type`, parent_id, order_no, icon
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_permission
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectByUserIdAndType" resultType="com.fzdkx.yunke.bean.dao.TPermission">
+        select tp.*
+        from t_permission tp
+                 left join t_role_permission trp on tp.id = trp.permission_id
+                 left join t_user_role tur on tur.role_id = trp.role_id
+        where tur.user_id = #{userId}
+          and tp.type = #{type}
+    </select>
+
+    <select id="selectChildren" resultType="com.fzdkx.yunke.bean.vo.PermissionViewVo">
+        # 查询 以parent_id为父的所有节点，和这些节点所含的子节点个数
+        SELECT
+            t.*,
+            temp.count
+        FROM
+            t_permission t,
+            (
+                SELECT
+                    t1.id,
+                    IFNULL( t2.count, 0 ) count
+                FROM
+                    t_permission t1
+                        LEFT JOIN ( SELECT count(*) count, parent_id FROM t_permission GROUP BY parent_id ) t2 ON t1.id = t2.parent_id
+            ) temp
+        WHERE
+            t.parent_id = #{parentId}
+          AND t.id = temp.id
+    </select>
+
+    <select id="selectAll" resultType="com.fzdkx.yunke.bean.query.PermissionQuery">
+        select id, parent_id, name
+        from t_permission
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_permission
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="batchDelete">
+        delete
+        from t_permission
+        where id in
+        <foreach collection="ids" separator="," open="(" close=")" item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.fzdkx.yunke.bean.dao.TPermission"
+            useGeneratedKeys="true">
+        insert into t_permission (`name`, code, url,
+                                  `type`, parent_id, order_no,
+                                  icon)
+        values (#{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
+                #{type,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, #{orderNo,jdbcType=INTEGER},
+                #{icon,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.fzdkx.yunke.bean.dao.TPermission"
+            useGeneratedKeys="true">
+        insert into t_permission
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                `name`,
+            </if>
+            <if test="code != null">
+                code,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="type != null">
+                `type`,
+            </if>
+            <if test="parentId != null">
+                parent_id,
+            </if>
+            <if test="orderNo != null">
+                order_no,
+            </if>
+            <if test="icon != null">
+                icon,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                #{parentId,jdbcType=INTEGER},
+            </if>
+            <if test="orderNo != null">
+                #{orderNo,jdbcType=INTEGER},
+            </if>
+            <if test="icon != null">
+                #{icon,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.fzdkx.yunke.bean.dao.TPermission">
+        update t_permission
+        <set>
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                `type` = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId,jdbcType=INTEGER},
+            </if>
+            <if test="orderNo != null">
+                order_no = #{orderNo,jdbcType=INTEGER},
+            </if>
+            <if test="icon != null">
+                icon = #{icon,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.fzdkx.yunke.bean.dao.TPermission">
+        update t_permission
+        set `name`    = #{name,jdbcType=VARCHAR},
+            code      = #{code,jdbcType=VARCHAR},
+            url       = #{url,jdbcType=VARCHAR},
+            `type`    = #{type,jdbcType=VARCHAR},
+            parent_id = #{parentId,jdbcType=INTEGER},
+            order_no  = #{orderNo,jdbcType=INTEGER},
+            icon      = #{icon,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>
