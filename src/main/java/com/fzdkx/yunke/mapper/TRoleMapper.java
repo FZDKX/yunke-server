@@ -25,4 +25,6 @@ public interface TRoleMapper {
     List<PermissionQuery> selectRolePerm(Integer id);
 
     int batchDelete(List<Integer> ids);
+
+    List<TRole> selectAll();
 }

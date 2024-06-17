@@ -1,8 +1,12 @@
 package com.fzdkx.yunke.controller;
 
+import com.fzdkx.yunke.bean.dao.LoginUser;
+import com.fzdkx.yunke.bean.dao.SystemUser;
 import com.fzdkx.yunke.bean.dao.TUser;
+import com.fzdkx.yunke.bean.vo.EditAddUserVO;
 import com.fzdkx.yunke.bean.vo.IdListVO;
 import com.fzdkx.yunke.bean.vo.UserDetailsVO;
+import com.fzdkx.yunke.bean.vo.UserVO;
 import com.fzdkx.yunke.common.Result;
 import com.fzdkx.yunke.service.UserService;
 import com.github.pagehelper.PageInfo;
@@ -22,7 +26,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/list")
-    public Result<PageInfo<TUser>> pageList(Integer pageSize, Integer pageNum) {
+    public Result<PageInfo<UserVO>> pageList(Integer pageSize, Integer pageNum) {
         return userService.getListByPage(pageSize, pageNum);
     }
 
@@ -32,27 +36,36 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Result<TUser> getUser(@PathVariable("id") Integer id) {
+    public Result<UserVO> getUser(@PathVariable("id") Integer id) {
         return userService.selectUserById(id);
     }
 
     @PostMapping
-    public Result<String> addUser(@RequestBody TUser tUser, Authentication authentication) {
-        return userService.addUser(tUser, authentication);
+    public Result<String> addUser(@RequestBody EditAddUserVO user, Authentication authentication) {
+        return userService.addUser(user, authentication);
     }
 
     @PutMapping
-    public Result<String> editUser(@RequestBody TUser tUser, Authentication authentication) {
-        return userService.editUser(tUser, authentication);
+    public Result<String> editUser(@RequestBody EditAddUserVO user, Authentication authentication) {
+        return userService.editUser(user, authentication);
     }
 
     @DeleteMapping("/{id}")
     public Result<String> deleteUser(@PathVariable("id") Integer id) {
         return userService.deleteUserById(id);
     }
+
     @DeleteMapping("/batch")
     public Result<String> batchDelete(@RequestBody IdListVO idListVO) {
         return userService.batchDelete(idListVO);
     }
 
+    @GetMapping("/all")
+    public Result<LoginUser> getUserAll(Authentication authentication) {
+        SystemUser systemUser = (SystemUser) authentication.getPrincipal();
+        LoginUser loginUser = (LoginUser) userService.loadUserByUsername(systemUser.getUsername());
+        // 消除密码
+        loginUser.getTUser().dataDesensitization();
+        return Result.success(loginUser);
+    }
 }

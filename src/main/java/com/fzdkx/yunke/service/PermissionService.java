@@ -2,8 +2,8 @@ package com.fzdkx.yunke.service;
 
 import com.fzdkx.yunke.bean.dao.TPermission;
 import com.fzdkx.yunke.bean.vo.IdListVO;
-import com.fzdkx.yunke.bean.vo.PermVO;
-import com.fzdkx.yunke.bean.vo.PermissionViewVo;
+import com.fzdkx.yunke.bean.vo.PermAllVO;
+import com.fzdkx.yunke.bean.vo.PermissionListVo;
 import com.fzdkx.yunke.common.Result;
 import com.github.pagehelper.PageInfo;
 
@@ -14,11 +14,11 @@ import java.util.List;
  * @create 2024/6/14
  */
 public interface PermissionService {
-    Result<PageInfo<PermissionViewVo>> pageQueryTopMenu(Integer pageNum, Integer pageSize);
+    Result<PageInfo<PermissionListVo>> pageQueryTopMenu(Integer pageNum, Integer pageSize);
 
-    Result<List<PermissionViewVo>> queryChildren(Integer id);
+    Result<List<PermissionListVo>> queryChildren(Integer id);
 
-    Result<List<PermVO>> queryAll();
+    Result<List<PermAllVO>> queryAll();
 
     Result<TPermission> query(Integer id);
 

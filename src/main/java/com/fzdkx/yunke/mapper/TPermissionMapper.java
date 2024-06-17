@@ -2,7 +2,8 @@ package com.fzdkx.yunke.mapper;
 
 import com.fzdkx.yunke.bean.dao.TPermission;
 import com.fzdkx.yunke.bean.query.PermissionQuery;
-import com.fzdkx.yunke.bean.vo.PermissionViewVo;
+import com.fzdkx.yunke.bean.vo.PermissionListVo;
+import com.fzdkx.yunke.bean.vo.PermissionVO;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -20,12 +21,13 @@ public interface TPermissionMapper {
 
     int updateByPrimaryKey(TPermission record);
 
-    List<TPermission> selectByUserIdAndType(@Param("userId") Integer userId, @Param("type") String type);
+    List<PermissionVO> selectMenuByUserId(@Param("userId") Integer userId);
 
-    List<PermissionViewVo> selectChildren(Integer parentId);
+    List<PermissionListVo> selectChildren(Integer parentId);
 
     List<PermissionQuery> selectAll();
 
     int batchDelete(List<Integer> ids);
 
+    List<TPermission> selectButtonByUserId(@Param("id") Integer id);
 }

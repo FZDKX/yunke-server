@@ -3,8 +3,8 @@ package com.fzdkx.yunke.service.impl;
 import com.fzdkx.yunke.bean.dao.TPermission;
 import com.fzdkx.yunke.bean.query.PermissionQuery;
 import com.fzdkx.yunke.bean.vo.IdListVO;
-import com.fzdkx.yunke.bean.vo.PermVO;
-import com.fzdkx.yunke.bean.vo.PermissionViewVo;
+import com.fzdkx.yunke.bean.vo.PermAllVO;
+import com.fzdkx.yunke.bean.vo.PermissionListVo;
 import com.fzdkx.yunke.common.Result;
 import com.fzdkx.yunke.mapper.TPermissionMapper;
 import com.fzdkx.yunke.service.PermissionService;
@@ -28,27 +28,27 @@ public class PermissionServiceImpl implements PermissionService {
     private TPermissionMapper tPermissionMapper;
 
     @Override
-    public Result<PageInfo<PermissionViewVo>> pageQueryTopMenu(Integer pageNum, Integer pageSize) {
+    public Result<PageInfo<PermissionListVo>> pageQueryTopMenu(Integer pageNum, Integer pageSize) {
         // 设置分页查询参数
         PageHelper.startPage(pageNum, pageSize);
         // 查询最顶层的记录
-        List<PermissionViewVo> permissions = tPermissionMapper.selectChildren(0);
+        List<PermissionListVo> permissions = tPermissionMapper.selectChildren(0);
         // 获取pageInfo
-        PageInfo<PermissionViewVo> pageInfo = new PageInfo<>(permissions);
+        PageInfo<PermissionListVo> pageInfo = new PageInfo<>(permissions);
         return Result.success(pageInfo);
     }
 
     @Override
-    public Result<List<PermissionViewVo>> queryChildren(Integer parentId) {
-        List<PermissionViewVo> permissionList = tPermissionMapper.selectChildren(parentId);
+    public Result<List<PermissionListVo>> queryChildren(Integer parentId) {
+        List<PermissionListVo> permissionList = tPermissionMapper.selectChildren(parentId);
         return Result.success(permissionList);
     }
 
     @Override
-    public Result<List<PermVO>> queryAll() {
+    public Result<List<PermAllVO>> queryAll() {
         List<PermissionQuery> list = tPermissionMapper.selectAll();
-        PermVO permVO = roleService.convert(list, 0);
-        return Result.success(permVO.getChildren());
+        PermAllVO permAllVO = roleService.convert(list, 0);
+        return Result.success(permAllVO.getChildren());
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.fzdkx.yunke.bean.dao.TRole;
 import com.fzdkx.yunke.bean.query.PermissionQuery;
 import com.fzdkx.yunke.bean.vo.AllPermAndRoleVO;
 import com.fzdkx.yunke.bean.vo.IdListVO;
-import com.fzdkx.yunke.bean.vo.PermVO;
+import com.fzdkx.yunke.bean.vo.PermAllVO;
 import com.fzdkx.yunke.common.Result;
 import com.fzdkx.yunke.mapper.TPermissionMapper;
 import com.fzdkx.yunke.mapper.TRoleMapper;
@@ -44,32 +44,32 @@ public class RoleServiceImpl implements RoleService {
 
 
     @Override
-    public Result<List<PermVO>> getRolePerm(Integer id) {
+    public Result<List<PermAllVO>> getRolePerm(Integer id) {
         // 查询角色的所有权限
         List<PermissionQuery> list = tRoleMapper.selectRolePerm(id);
         // 封装成 RolePermVO
-        PermVO rolePermVO = convert(list, 0);
-        return Result.success(rolePermVO.getChildren());
+        PermAllVO rolePermAllVO = convert(list, 0);
+        return Result.success(rolePermAllVO.getChildren());
     }
 
     @Override
-    public PermVO convert(List<PermissionQuery> list, int curId) {
-        PermVO rolePermVO = new PermVO(curId);
+    public PermAllVO convert(List<PermissionQuery> list, int curId) {
+        PermAllVO rolePermAllVO = new PermAllVO(curId);
         // 创建存储子节点的集合
-        ArrayList<PermVO> rolePermVOList = new ArrayList<>();
+        ArrayList<PermAllVO> rolePermAllVOList = new ArrayList<>();
         // 遍历所有节点
         for (PermissionQuery node : list) {
             // 如果节点的父节点为 当前节点，那么就递归该节点
             if (node.getParentId() == curId) {
-                rolePermVOList.add(convert(list, node.getId()));
+                rolePermAllVOList.add(convert(list, node.getId()));
             }
             // 如果节点就为当前节点，那么就为name赋值
             else if (node.getId() == curId) {
-                rolePermVO.setName(node.getName());
+                rolePermAllVO.setName(node.getName());
             }
         }
-        rolePermVO.setChildren(rolePermVOList);
-        return rolePermVO;
+        rolePermAllVO.setChildren(rolePermAllVOList);
+        return rolePermAllVO;
     }
 
     @Override
@@ -79,9 +79,9 @@ public class RoleServiceImpl implements RoleService {
         // 查询所有权限
         List<PermissionQuery> all = tPermissionMapper.selectAll();
         // 转换
-        PermVO permVO = convert(all, 0);
+        PermAllVO permAllVO = convert(all, 0);
         // 设置进入结果集
-        allPermAndRoleVO.setRolePermVOList(permVO.getChildren());
+        allPermAndRoleVO.setRolePermAllVOList(permAllVO.getChildren());
         // 获取角色已拥有的权限
         List<PermissionQuery> list = tRoleMapper.selectRolePerm(id);
         // 获取权限id
@@ -140,5 +140,11 @@ public class RoleServiceImpl implements RoleService {
         // 删除
         int count = tRoleMapper.batchDelete(ids.getIds());
         return count >= ids.getIds().size() ? Result.success() : Result.fail();
+    }
+
+    @Override
+    public Result<List<TRole>> queryAllRoles() {
+        List<TRole> roleList = tRoleMapper.selectAll();
+        return Result.success(roleList);
     }
 }

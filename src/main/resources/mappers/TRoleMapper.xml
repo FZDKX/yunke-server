@@ -36,6 +36,10 @@
         WHERE trp.role_id = #{id}
 
     </select>
+    <select id="selectAll" resultType="com.fzdkx.yunke.bean.dao.TRole">
+        select *
+        from t_role
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from t_role

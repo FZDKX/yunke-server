@@ -10,7 +10,7 @@ import java.util.List;
  * 用户的权限信息VO
  */
 @Data
-public class PermVO {
+public class PermAllVO {
 
     // 权限id
     private Integer id;
@@ -19,9 +19,9 @@ public class PermVO {
     private String name;
 
     // 子权限
-    private List<PermVO> children;
+    private List<PermAllVO> children;
 
-    public PermVO(Integer id) {
+    public PermAllVO(Integer id) {
         this.id = id;
     }
 }

@@ -4,7 +4,7 @@ import com.fzdkx.yunke.bean.dao.TRole;
 import com.fzdkx.yunke.bean.query.PermissionQuery;
 import com.fzdkx.yunke.bean.vo.AllPermAndRoleVO;
 import com.fzdkx.yunke.bean.vo.IdListVO;
-import com.fzdkx.yunke.bean.vo.PermVO;
+import com.fzdkx.yunke.bean.vo.PermAllVO;
 import com.fzdkx.yunke.common.Result;
 import com.github.pagehelper.PageInfo;
 
@@ -17,8 +17,8 @@ import java.util.List;
 public interface RoleService {
     Result<PageInfo<TRole>> getListByPage(Integer pageSize, Integer pageNum);
 
-    Result<List<PermVO>> getRolePerm(Integer id);
-    PermVO convert(List<PermissionQuery> list, int curId);
+    Result<List<PermAllVO>> getRolePerm(Integer id);
+    PermAllVO convert(List<PermissionQuery> list, int curId);
 
     Result<AllPermAndRoleVO> queryUserDetail(Integer id);
 
@@ -29,4 +29,6 @@ public interface RoleService {
     Result<String> deleteRole(Integer id);
 
     Result<String> batchDeleteRole(IdListVO idListVO);
+
+    Result<List<TRole>> queryAllRoles();
 }

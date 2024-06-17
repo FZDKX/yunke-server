@@ -11,6 +11,25 @@
         <result column="order_no" jdbcType="INTEGER" property="orderNo"/>
         <result column="icon" jdbcType="VARCHAR" property="icon"/>
     </resultMap>
+
+    <resultMap id="PermissionVOMap" type="com.fzdkx.yunke.bean.vo.PermissionVO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+        <result column="order_no" jdbcType="INTEGER" property="orderNo"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <!-- children属性 一对多 集合-->
+        <collection property="children" ofType="com.fzdkx.yunke.bean.dao.TPermission">
+            <id column="cid" jdbcType="INTEGER" property="id"/>
+            <result column="cname" jdbcType="VARCHAR" property="name"/>
+            <result column="curl" jdbcType="VARCHAR" property="url"/>
+            <result column="cicon" jdbcType="VARCHAR" property="icon"/>
+        </collection>
+    </resultMap>
+
     <sql id="Base_Column_List">
         id, `name`, code, url, `type`, parent_id, order_no, icon
     </sql>
@@ -20,38 +39,48 @@
         from t_permission
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <select id="selectByUserIdAndType" resultType="com.fzdkx.yunke.bean.dao.TPermission">
-        select tp.*
-        from t_permission tp
-                 left join t_role_permission trp on tp.id = trp.permission_id
-                 left join t_user_role tur on tur.role_id = trp.role_id
-        where tur.user_id = #{userId}
-          and tp.type = #{type}
+
+    <select id="selectMenuByUserId" resultMap="PermissionVOMap">
+        # 查询用户所有的菜单权限，父子关系查询
+        SELECT DISTINCT tp.*,
+                        temp.id   cid,
+                        temp.name cname,
+                        temp.url  curl,
+                        temp.icon cicon
+        FROM t_permission tp
+                 LEFT JOIN t_role_permission trp ON tp.id = trp.permission_id
+                 LEFT JOIN t_user_role tur ON tur.role_id = trp.role_id
+                 LEFT JOIN t_permission temp ON tp.id = temp.parent_id
+        WHERE tur.user_id = #{id}
+          AND tp.type = 'menu'
+          AND temp.type = 'menu'
     </select>
 
-    <select id="selectChildren" resultType="com.fzdkx.yunke.bean.vo.PermissionViewVo">
+    <select id="selectChildren" resultType="com.fzdkx.yunke.bean.vo.PermissionListVo">
         # 查询 以parent_id为父的所有节点，和这些节点所含的子节点个数
-        SELECT
-            t.*,
-            temp.count
-        FROM
-            t_permission t,
-            (
-                SELECT
-                    t1.id,
-                    IFNULL( t2.count, 0 ) count
-                FROM
-                    t_permission t1
-                        LEFT JOIN ( SELECT count(*) count, parent_id FROM t_permission GROUP BY parent_id ) t2 ON t1.id = t2.parent_id
-            ) temp
-        WHERE
-            t.parent_id = #{parentId}
+        SELECT t.*,
+               temp.count
+        FROM t_permission t,
+             (SELECT t1.id,
+                     IFNULL(t2.count, 0) count
+              FROM t_permission t1
+                       LEFT JOIN (SELECT count(*) count, parent_id FROM t_permission GROUP BY parent_id) t2
+                                 ON t1.id = t2.parent_id) temp
+        WHERE t.parent_id = #{parentId}
           AND t.id = temp.id
     </select>
 
     <select id="selectAll" resultType="com.fzdkx.yunke.bean.query.PermissionQuery">
         select id, parent_id, name
         from t_permission
+    </select>
+    <select id="selectButtonByUserId" resultType="com.fzdkx.yunke.bean.dao.TPermission">
+        SELECT DISTINCT tp.*
+        FROM t_permission tp
+                 LEFT JOIN t_role_permission trp ON tp.id = trp.permission_id
+                 LEFT JOIN t_user_role tur ON tur.role_id = trp.role_id
+        WHERE tur.user_id = #{id}
+          AND tp.type = 'button'
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

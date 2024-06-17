@@ -3,7 +3,7 @@ package com.fzdkx.yunke.controller;
 import com.fzdkx.yunke.bean.dao.TRole;
 import com.fzdkx.yunke.bean.vo.AllPermAndRoleVO;
 import com.fzdkx.yunke.bean.vo.IdListVO;
-import com.fzdkx.yunke.bean.vo.PermVO;
+import com.fzdkx.yunke.bean.vo.PermAllVO;
 import com.fzdkx.yunke.bean.vo.RoleInfoVO;
 import com.fzdkx.yunke.common.Result;
 import com.fzdkx.yunke.service.RoleService;
@@ -29,7 +29,7 @@ public class RoleController {
     }
 
     @GetMapping("/perm/{id}")
-    public Result<List<PermVO>> queryRolePerm(@PathVariable("id") Integer id) {
+    public Result<List<PermAllVO>> queryRolePerm(@PathVariable("id") Integer id) {
         return roleService.getRolePerm(id);
     }
 
@@ -52,8 +52,14 @@ public class RoleController {
     public Result<String> deleteRole(@PathVariable("id") Integer id) {
         return roleService.deleteRole(id);
     }
+
     @DeleteMapping("/batch")
     public Result<String> batchDelete(@RequestBody IdListVO idListVO) {
         return roleService.batchDeleteRole(idListVO);
+    }
+
+    @GetMapping("/all")
+    public Result<List<TRole>> queryRoleDetail() {
+        return roleService.queryAllRoles();
     }
 }

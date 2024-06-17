@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 public class AllPermAndRoleVO {
     // 所有权限
-    private List<PermVO> rolePermVOList;
+    private List<PermAllVO> rolePermAllVOList;
     // 角色拥有权限
     private List<Integer> ids;
     // 角色

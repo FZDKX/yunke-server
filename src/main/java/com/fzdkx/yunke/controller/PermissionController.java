@@ -2,8 +2,8 @@ package com.fzdkx.yunke.controller;
 
 import com.fzdkx.yunke.bean.dao.TPermission;
 import com.fzdkx.yunke.bean.vo.IdListVO;
-import com.fzdkx.yunke.bean.vo.PermVO;
-import com.fzdkx.yunke.bean.vo.PermissionViewVo;
+import com.fzdkx.yunke.bean.vo.PermAllVO;
+import com.fzdkx.yunke.bean.vo.PermissionListVo;
 import com.fzdkx.yunke.common.Result;
 import com.fzdkx.yunke.service.PermissionService;
 import com.github.pagehelper.PageInfo;
@@ -25,20 +25,20 @@ public class PermissionController {
 
     // 懒加载，分页查询权限信息
     @GetMapping("/{pageNum}/{pageSize}")
-    public Result<PageInfo<PermissionViewVo>> queryTopMenu(@PathVariable("pageNum") Integer pageNum,
+    public Result<PageInfo<PermissionListVo>> queryTopMenu(@PathVariable("pageNum") Integer pageNum,
                                                            @PathVariable("pageSize") Integer pageSize) {
         return permissionService.pageQueryTopMenu(pageNum, pageSize);
     }
 
     // 加载子节点
     @GetMapping("/children/{id}")
-    public Result<List<PermissionViewVo>> queryChildren(@PathVariable("id") Integer id) {
+    public Result<List<PermissionListVo>> queryChildren(@PathVariable("id") Integer id) {
         return permissionService.queryChildren(id);
     }
 
     // 查询所有权限
     @GetMapping("/all")
-    public Result<List<PermVO>> queryAll() {
+    public Result<List<PermAllVO>> queryAll() {
         return permissionService.queryAll();
     }
 
