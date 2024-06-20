@@ -35,7 +35,6 @@ public enum CodeEnum {
 
     SERVER_ERROR(912, "服务器异常");
 
-
     private int code;
 
     private String message;

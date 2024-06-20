@@ -1,13 +1,20 @@
 package com.fzdkx.yunke.service.impl;
 
-import com.fzdkx.yunke.bean.dao.*;
+import com.fzdkx.yunke.bean.dao.LoginUser;
+import com.fzdkx.yunke.bean.dao.TPermission;
+import com.fzdkx.yunke.bean.dao.TRole;
+import com.fzdkx.yunke.bean.dao.TUser;
+import com.fzdkx.yunke.bean.query.SQLQuery;
 import com.fzdkx.yunke.bean.vo.*;
+import com.fzdkx.yunke.common.RedisConstant;
 import com.fzdkx.yunke.common.Result;
+import com.fzdkx.yunke.manager.RedisManager;
 import com.fzdkx.yunke.mapper.TPermissionMapper;
 import com.fzdkx.yunke.mapper.TRoleMapper;
 import com.fzdkx.yunke.mapper.TUserMapper;
 import com.fzdkx.yunke.mapper.TUserRoleMapper;
 import com.fzdkx.yunke.service.UserService;
+import com.fzdkx.yunke.utils.CacheUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
@@ -16,9 +23,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 发着呆看星
@@ -34,6 +43,9 @@ public class UserServiceImpl implements UserService {
     private TPermissionMapper tPermissionMapper;
     @Resource
     private TUserRoleMapper tUserRoleMapper;
+
+    @Resource
+    private RedisManager redisManager;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -53,7 +65,7 @@ public class UserServiceImpl implements UserService {
         // 设置 当前页 及 每页大小
         PageHelper.startPage(pageNum, pageSize);
         // 查询所有数据，自动拼接 limit
-        List<UserVO> users = tUserMapper.selectUserList();
+        List<UserVO> users = tUserMapper.selectUserList(new SQLQuery());
         // 转成 PageInfo
         PageInfo<UserVO> pageInfo = new PageInfo<>(users);
         return Result.success(pageInfo);
@@ -62,7 +74,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result<UserDetailsVO> selectUserDetailsById(Integer id) {
         UserDetailsVO tUser = tUserMapper.selectUserDetails(id);
-        tUser.setPassword("");
+        tUser.setPassword(null);
         return Result.success(tUser);
     }
 
@@ -77,28 +89,30 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public Result<String> addUser(EditAddUserVO user, Authentication authentication) {
         // 获取当前用户
-        SystemUser systemUser = (SystemUser) authentication.getPrincipal();
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         // 设置创建用户
-        user.setCreateBy(systemUser.getId());
+        user.setCreateBy(loginUser.getTUser().getId());
         // 设置创建时间
         user.setCreateTime(new Date());
         // 添加用户
         tUserMapper.insertSelective(user);
         // 添加角色
-        List<Integer> roleIds = user.getRoleIds();
-        if (roleIds != null) {
-            tUserRoleMapper.insertList(roleIds, user.getId());
+        if (!ObjectUtils.isEmpty(user.getRoleIds())) {
+            tUserRoleMapper.insertList(user.getRoleIds(), user.getId());
         }
+        // 删除缓存中的 负责人数据
+        redisManager.delete(RedisConstant.OWNER_PREFIX);
         return Result.success();
     }
 
     @Override
     @Transactional
     public Result<String> editUser(EditAddUserVO user, Authentication authentication) {
+        user.setPassword(null);
         // 获取当前用户
-        SystemUser systemUser = (SystemUser) authentication.getPrincipal();
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         // 更新编辑用户
-        user.setEditBy(systemUser.getId());
+        user.setEditBy(loginUser.getTUser().getId());
         // 更新编辑时间
         user.setEditTime(new Date());
         // 更新用户信息
@@ -107,9 +121,11 @@ public class UserServiceImpl implements UserService {
         // 删除所有角色
         tUserRoleMapper.deleteByUserId(user.getId());
         // 新增角色
-        if (user.getRoleIds() != null) {
+        if (!ObjectUtils.isEmpty(user.getRoleIds())) {
             tUserRoleMapper.insertList(user.getRoleIds(), user.getId());
         }
+        // 删除缓存中的 负责人数据
+        redisManager.delete(RedisConstant.OWNER_PREFIX);
         return Result.success();
     }
 
@@ -120,6 +136,8 @@ public class UserServiceImpl implements UserService {
         tUserRoleMapper.deleteByUserId(id);
         // 删除用户
         tUserMapper.deleteByPrimaryKey(id);
+        // 删除缓存中的 负责人数据
+        redisManager.delete(RedisConstant.OWNER_PREFIX);
         return Result.success();
     }
 
@@ -130,7 +148,27 @@ public class UserServiceImpl implements UserService {
         }
         // 删除
         int count = tUserMapper.batchDelete(ids.getIds());
+        // 删除缓存中的 负责人数据
+        redisManager.delete(RedisConstant.OWNER_PREFIX);
         return count >= ids.getIds().size() ? Result.success() : Result.fail();
     }
 
+    @Override
+    public Result<List<String>> getUserPermButton(int id) {
+        List<String> perms = tPermissionMapper.selectButtonCodeByUserId(id);
+        return Result.success(perms);
+    }
+
+    @Override
+    public Result<List<TUser>> queryAllOwner() {
+        List<TUser> ownerList = CacheUtils.getCacheData(() -> {  // 从缓存中查询数据
+            return redisManager.getListValue(RedisConstant.OWNER_PREFIX, TUser.class);
+        }, () -> { // 从数据库中查询数据
+            return tUserMapper.selectAllOwner();
+        }, (data) -> { // 消费，将数据放入缓存中
+            redisManager.setListValue(RedisConstant.OWNER_PREFIX, data);
+            redisManager.setExpireTime(RedisConstant.OWNER_PREFIX, RedisConstant.DEFAULT_EXPIRE_TIME, TimeUnit.SECONDS);
+        });
+        return Result.success(ownerList);
+    }
 }

@@ -16,4 +16,7 @@ public class RedisConstant {
     // 前缀
     // token前缀
     public static final String TOKEN_PREFIX = "token:";
+
+    // 负责人前缀
+    public static final String OWNER_PREFIX = "owner";
 }

@@ -59,6 +59,9 @@
         FROM t_user tu
                  LEFT JOIN t_user_role tur ON tu.id = tur.user_id
                  LEFT JOIN t_role tr ON tur.role_id = tr.id
+        <where>
+            ${sqlQuery.filterSQL}
+        </where>
     </select>
     <select id="selectUserDetails" resultType="com.fzdkx.yunke.bean.vo.UserDetailsVO">
         select t1.*, t2.name createName, t3.name editName
@@ -75,6 +78,10 @@
                  LEFT JOIN t_user_role tur ON tu.id = tur.user_id
                  LEFT JOIN t_role tr ON tur.role_id = tr.id
         where tu.id = #{id}
+    </select>
+    <select id="selectAllOwner" resultType="com.fzdkx.yunke.bean.dao.TUser">
+        SELECT id, name
+        FROM t_user
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete

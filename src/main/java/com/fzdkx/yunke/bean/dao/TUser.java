@@ -72,9 +72,9 @@ public class TUser implements Serializable {
     private Date lastLoginTime;
 
     public void dataDesensitization() {
-        this.password = "";
-        this.phone = "";
-        this.email = "";
+        this.password = null;
+        this.phone = null;
+        this.email = null;
     }
 
     private static final long serialVersionUID = 1L;

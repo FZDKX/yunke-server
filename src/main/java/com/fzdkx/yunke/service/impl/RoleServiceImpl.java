@@ -128,6 +128,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Result<String> deleteRole(Integer id) {
+        // 先删除相关联的权限记录
+        tRolePermissionMapper.deletePermByRoleId(id);
+        // 在删除角色
         tRoleMapper.deleteByPrimaryKey(id);
         return Result.success();
     }

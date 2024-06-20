@@ -10,6 +10,8 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
+
 /**
  * @author 发着呆看星
  * @create 2024/6/7
@@ -28,4 +30,8 @@ public interface UserService extends UserDetailsService {
     Result<String> deleteUserById(Integer id);
 
     Result<String> batchDelete(IdListVO ids);
+
+    Result<List<String>> getUserPermButton(int id);
+
+    Result<List<TUser>> queryAllOwner();
 }

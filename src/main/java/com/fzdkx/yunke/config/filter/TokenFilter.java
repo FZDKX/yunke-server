@@ -1,7 +1,6 @@
 package com.fzdkx.yunke.config.filter;
 
 import com.fzdkx.yunke.bean.dao.LoginUser;
-import com.fzdkx.yunke.bean.dao.SystemUser;
 import com.fzdkx.yunke.bean.dao.TUser;
 import com.fzdkx.yunke.common.CodeEnum;
 import com.fzdkx.yunke.common.RedisConstant;
@@ -103,10 +102,9 @@ public class TokenFilter extends OncePerRequestFilter {
         // 校验通过后，将用户信息设置在security的上下文环境中
         // 查询 user detail
         LoginUser loginUser = (LoginUser) userService.loadUserByUsername(user.getUsername());
-        // 创建SystemUser
-        SystemUser systemUser = new SystemUser(loginUser.getTUser().getId(), loginUser.getUsername());
+        // 创建SystemUse
         UsernamePasswordAuthenticationToken authenticationToken
-                = new UsernamePasswordAuthenticationToken(systemUser, loginUser.getPassword(), loginUser.getAuthorities());
+                = new UsernamePasswordAuthenticationToken(loginUser, loginUser.getPassword(), loginUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         // 如果选择 记住密码 ，那么进行token刷新
         threadPoolTaskExecutor.execute(() -> {

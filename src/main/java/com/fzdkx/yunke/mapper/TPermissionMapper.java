@@ -30,4 +30,6 @@ public interface TPermissionMapper {
     int batchDelete(List<Integer> ids);
 
     List<TPermission> selectButtonByUserId(@Param("id") Integer id);
+
+    List<String> selectButtonCodeByUserId(int id);
 }

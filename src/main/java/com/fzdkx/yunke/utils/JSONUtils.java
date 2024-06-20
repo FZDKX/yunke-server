@@ -1,5 +1,6 @@
 package com.fzdkx.yunke.utils;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -9,6 +10,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class JSONUtils {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    // 忽略所有为null的字段
+    static {
+        OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    }
 
     public static String toJSON(Object obj) {
         try {

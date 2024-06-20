@@ -14,6 +14,24 @@
     <result column="edit_time" jdbcType="TIMESTAMP" property="editTime" />
     <result column="edit_by" jdbcType="INTEGER" property="editBy" />
   </resultMap>
+
+  <resultMap id="voMap" type="com.fzdkx.yunke.bean.vo.ActivityVO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="owner_id" jdbcType="INTEGER" property="ownerId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="cost" jdbcType="DECIMAL" property="cost" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="edit_time" jdbcType="TIMESTAMP" property="editTime" />
+    <result column="edit_by" jdbcType="INTEGER" property="editBy" />
+    <result column="editName" jdbcType="INTEGER" property="editName" />
+    <result column="ownerName" jdbcType="INTEGER" property="ownerName" />
+    <result column="createName" jdbcType="INTEGER" property="createName" />
+  </resultMap>
+
   <sql id="Base_Column_List">
     id, owner_id, `name`, start_time, end_time, cost, description, create_time, create_by, 
     edit_time, edit_by
@@ -24,9 +42,42 @@
     from t_activity
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectFilterList" resultType="com.fzdkx.yunke.bean.vo.ActivityVO">
+      select ta.* , tu.name ownerName
+      from t_activity ta
+      left join t_user tu on ta.owner_id = tu.id
+      <where>
+          <if test="query.ownerId != null">
+              and ta.owner_id = #{query.ownerId}
+          </if>
+          <if test="query.name != null and query.name != ''">
+              and ta.name like concat('%',#{query.name},'%')
+          </if>
+          <if test="query.minCost != null">
+              and cost &gt;= #{query.minCost}
+          </if>
+          <if test="query.maxCost != null">
+              and cost &lt;= #{query.maxCost}
+          </if>
+          <if test="query.activityMinTime != null">
+              and start_time &gt;= #{query.activityMinTime}
+          </if>
+          <if test="query.activityMaxTime != null">
+              and end_time &lt;= #{activityMaxTime}
+          </if>
+          ${sqlQuery.filterSQL}
+      </where>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_activity
     where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="batchDeleteByIds">
+      delete from t_activity
+      where id in
+      <foreach collection="ids" item="id" separator="," open="(" close=")">
+          #{id}
+      </foreach>
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.fzdkx.yunke.bean.dao.TActivity" useGeneratedKeys="true">
     insert into t_activity (owner_id, `name`, start_time, 

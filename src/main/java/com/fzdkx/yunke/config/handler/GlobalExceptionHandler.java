@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -36,12 +37,20 @@ public class GlobalExceptionHandler {
         return Result.fail(CodeEnum.DATA_ACCESS_ERROR);
     }
 
-    @Order(1)
+    @Order(5)
     @ExceptionHandler(DataIntegrityViolationException.class)
     public Result<String> handlerDataIntegrityViolationException(DataIntegrityViolationException e) {
         log.error(e.getMessage());
         e.printStackTrace();
         return Result.fail(CodeEnum.DATA_INTEGRITY_VIOLATION);
+    }
+
+    @Order(1)
+    @ExceptionHandler(AccessDeniedException.class)
+    public Result<String> handlerAccessDeniedException(AccessDeniedException e) {
+        log.error(e.getMessage());
+        e.printStackTrace();
+        return Result.fail(CodeEnum.NO_AUTHORITY);
     }
 
 }
