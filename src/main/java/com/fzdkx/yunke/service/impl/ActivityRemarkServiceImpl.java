@@ -2,10 +2,10 @@ package com.fzdkx.yunke.service.impl;
 
 import com.fzdkx.yunke.bean.dao.LoginUser;
 import com.fzdkx.yunke.bean.dao.TActivityRemark;
-import com.fzdkx.yunke.bean.vo.RemarkVO;
+import com.fzdkx.yunke.bean.vo.ActivityRemarkVO;
 import com.fzdkx.yunke.common.Result;
 import com.fzdkx.yunke.mapper.TActivityRemarkMapper;
-import com.fzdkx.yunke.service.RemarkService;
+import com.fzdkx.yunke.service.ActivityRemarkService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import jakarta.annotation.Resource;
@@ -22,15 +22,15 @@ import java.util.List;
  * @create 2024/6/19
  */
 @Service
-public class RemarkServiceImpl implements RemarkService {
+public class ActivityRemarkServiceImpl implements ActivityRemarkService {
     @Resource
     private TActivityRemarkMapper tActivityRemarkMapper;
 
     @Override
-    public Result<PageInfo<RemarkVO>> remarkPage(Integer id, Integer pageNum, Integer pageSize) {
+    public Result<PageInfo<ActivityRemarkVO>> remarkPage(Integer id, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<RemarkVO> remarkVOList = tActivityRemarkMapper.selectListByActivityId(id);
-        PageInfo<RemarkVO> pageInfo = new PageInfo<>(remarkVOList);
+        List<ActivityRemarkVO> activityRemarkVOList = tActivityRemarkMapper.selectListByActivityId(id);
+        PageInfo<ActivityRemarkVO> pageInfo = new PageInfo<>(activityRemarkVOList);
         return Result.success(pageInfo);
     }
 

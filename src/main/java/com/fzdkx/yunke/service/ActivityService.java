@@ -7,6 +7,8 @@ import com.fzdkx.yunke.bean.vo.IdListVO;
 import com.fzdkx.yunke.common.Result;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 /**
  * @author 发着呆看星
  * @create 2024/6/18
@@ -24,4 +26,6 @@ public interface ActivityService {
     Result<String> deleteActivity(Integer id);
 
     Result<String> batchDeleteActivity(IdListVO idListVO);
+
+    List<TActivity> loadAllOngoingActivity();
 }

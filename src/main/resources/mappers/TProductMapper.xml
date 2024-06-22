@@ -23,7 +23,12 @@
     from t_product
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <select id="selectAll" resultType="com.fzdkx.yunke.bean.dao.TProduct">
+        select id, name
+        from t_product
+        where state = 0
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_product
     where id = #{id,jdbcType=INTEGER}
   </delete>

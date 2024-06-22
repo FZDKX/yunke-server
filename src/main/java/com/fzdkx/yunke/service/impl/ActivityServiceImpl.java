@@ -96,4 +96,9 @@ public class ActivityServiceImpl implements ActivityService {
         tActivityMapper.batchDeleteByIds(idListVO.getIds());
         return Result.success();
     }
+
+    @Override
+    public List<TActivity> loadAllOngoingActivity() {
+        return tActivityMapper.selectAllOngoingCache();
+    }
 }

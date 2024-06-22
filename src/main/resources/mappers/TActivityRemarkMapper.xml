@@ -20,7 +20,7 @@
         from t_activity_remark
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <select id="selectListByActivityId" resultType="com.fzdkx.yunke.bean.vo.RemarkVO">
+    <select id="selectListByActivityId" resultType="com.fzdkx.yunke.bean.vo.ActivityRemarkVO">
         select tar.* , tu1.name createName , tu2.name editName
         from t_activity_remark tar
         left join t_activity ta on ta.id = tar.activity_id

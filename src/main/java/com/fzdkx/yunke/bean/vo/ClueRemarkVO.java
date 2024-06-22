@@ -1,20 +1,17 @@
 package com.fzdkx.yunke.bean.vo;
 
-import com.fzdkx.yunke.bean.dao.TActivityRemark;
+import com.fzdkx.yunke.bean.dao.TClueRemark;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
  * @author 发着呆看星
- * @create 2024/6/19
+ * @create 2024/6/22
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class RemarkVO extends TActivityRemark {
-    // 创建人
+public class ClueRemarkVO extends TClueRemark {
     private String createName;
-    // 编辑人
     private String editName;
-    // 活动名称
-    private String activityName;
+    private String noteWayName;
 }

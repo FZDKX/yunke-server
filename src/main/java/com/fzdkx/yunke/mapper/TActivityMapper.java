@@ -26,4 +26,6 @@ public interface TActivityMapper {
     List<ActivityVO> selectFilterList(@Param("sqlQuery") SQLQuery sqlQuery, @Param("query") ActivitySearchQuery query);
 
     int batchDeleteByIds(List<Integer> ids);
+
+    List<TActivity> selectAllOngoingCache();
 }

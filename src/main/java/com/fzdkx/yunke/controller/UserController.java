@@ -99,6 +99,7 @@ public class UserController {
     // 加载负责人列表
     @GetMapping("/owner")
     public Result<List<TUser>> getAllOwner() {
-        return userService.queryAllOwner();
+        List<TUser> tUsers = userService.queryAllOwner();
+        return Result.success(tUsers);
     }
 }

@@ -33,5 +33,5 @@ public interface UserService extends UserDetailsService {
 
     Result<List<String>> getUserPermButton(int id);
 
-    Result<List<TUser>> queryAllOwner();
+    List<TUser> queryAllOwner();
 }

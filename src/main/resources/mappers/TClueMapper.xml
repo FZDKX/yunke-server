@@ -27,6 +27,41 @@
     <result column="edit_time" jdbcType="TIMESTAMP" property="editTime" />
     <result column="edit_by" jdbcType="INTEGER" property="editBy" />
   </resultMap>
+  <resultMap id="ClueVOMap" type="com.fzdkx.yunke.bean.vo.ClueVO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="owner_id" jdbcType="INTEGER" property="ownerId" />
+    <result column="activity_id" jdbcType="INTEGER" property="activityId" />
+    <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+    <result column="appellation" jdbcType="INTEGER" property="appellation" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="weixin" jdbcType="VARCHAR" property="weixin" />
+    <result column="qq" jdbcType="VARCHAR" property="qq" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="job" jdbcType="VARCHAR" property="job" />
+    <result column="year_income" jdbcType="DECIMAL" property="yearIncome" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="need_loan" jdbcType="INTEGER" property="needLoan" />
+    <result column="intention_state" jdbcType="INTEGER" property="intentionState" />
+    <result column="intention_product" jdbcType="INTEGER" property="intentionProduct" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="source" jdbcType="INTEGER" property="source" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="next_contact_time" jdbcType="TIMESTAMP" property="nextContactTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="edit_time" jdbcType="TIMESTAMP" property="editTime" />
+    <result column="edit_by" jdbcType="INTEGER" property="editBy" />
+    <!-- 字符串属性 -->
+    <result column="ownerName" property="ownerName" />
+    <result column="activityName" property="activityName" />
+    <result column="appellationStr" property="appellationStr" />
+    <result column="needLoanStr" property="needLoanStr" />
+    <result column="intentionStateStr" property="intentionStateStr" />
+    <result column="intentionProductStr" property="intentionProductStr" />
+    <result column="stateStr" property="stateStr" />
+    <result column="ownerName" property="sourceStr" />
+  </resultMap>
   <sql id="Base_Column_List">
     id, owner_id, activity_id, full_name, appellation, phone, weixin, qq, email, age, 
     job, year_income, address, need_loan, intention_state, intention_product, `state`, 
@@ -37,6 +72,36 @@
     <include refid="Base_Column_List" />
     from t_clue
     where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectList" resultMap="ClueVOMap">
+        select tc.* , tu.name  ownerName , ta.name activityName , tdv1.type_value appellationStr
+                    , tdv2.type_value needLoanStr , tdv3.type_value intentionStateStr , tdv4.type_value stateStr
+                    , tdv5.type_value sourceStr , tp.name intentionProductStr
+        from t_clue tc
+        left join t_user tu on tc.owner_id = tu.id
+        left join t_activity ta on tc.activity_id = ta.id
+        left join t_dic_value tdv1 on tc.appellation = tdv1.id
+        left join t_dic_value tdv2 on tc.need_loan = tdv2.id
+        left join t_dic_value tdv3 on tc.intention_state = tdv3.id
+        left join t_dic_value tdv4 on tc.state = tdv4.id
+        left join t_dic_value tdv5 on tc.source = tdv5.id
+        left join t_product tp on tc.intention_product = tp.id
+  </select>
+
+  <select id="selectClueVO" resultMap="ClueVOMap">
+    select tc.* , tu.name  ownerName , ta.name activityName , tdv1.type_value appellationStr
+         , tdv2.type_value needLoanStr , tdv3.type_value intentionStateStr , tdv4.type_value stateStr
+         , tdv5.type_value sourceStr , tp.name intentionProductStr
+    from t_clue tc
+           left join t_user tu on tc.owner_id = tu.id
+           left join t_activity ta on tc.activity_id = ta.id
+           left join t_dic_value tdv1 on tc.appellation = tdv1.id
+           left join t_dic_value tdv2 on tc.need_loan = tdv2.id
+           left join t_dic_value tdv3 on tc.intention_state = tdv3.id
+           left join t_dic_value tdv4 on tc.state = tdv4.id
+           left join t_dic_value tdv5 on tc.source = tdv5.id
+           left join t_product tp on tc.intention_product = tp.id
+    where tc.id = #{id}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_clue
@@ -205,7 +270,22 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.fzdkx.yunke.bean.dao.TClue">
+    <insert id="batchInsert">
+      insert into t_clue (owner_id, activity_id, full_name, appellation, phone, weixin,
+      qq, email, age, job, year_income, address, need_loan, intention_state,
+      intention_product, state, source, description, next_contact_time, create_time,
+      create_by) VALUES
+      <foreach collection="list" separator="," item="e">
+        (
+        #{e.ownerId} , #{e.activityId} , #{e.fullName} ,#{e.appellation} ,#{e.phone} ,#{e.weixin} ,#{e.qq} ,
+        #{e.email} ,#{e.age} ,#{e.job} ,#{e.yearIncome} ,#{e.address} ,#{e.needLoan} ,
+        #{e.intentionState} ,#{e.intentionProduct} ,#{e.state} ,#{e.source} ,#{e.description} ,#{e.nextContactTime}
+        ,#{e.createTime} , #{e.createBy}
+        )
+      </foreach>
+
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.fzdkx.yunke.bean.dao.TClue">
     update t_clue
     <set>
       <if test="ownerId != null">

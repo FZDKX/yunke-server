@@ -22,9 +22,26 @@
     from t_clue_remark
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectListByClueId" resultType="com.fzdkx.yunke.bean.vo.ClueRemarkVO">
+    select tcr.* , tu1.name createName, tu2.name editName , tdv.type_value noteWayName
+    from t_clue_remark tcr
+    left join t_user tu1 on tcr.create_by = tu1.id
+    left join t_user tu2 on tcr.edit_by = tu2.id
+    left join t_dic_value tdv on tcr.note_way = tdv.id
+    where deleted = 0
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_clue_remark
     where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByClueId">
+    delete from t_clue_remark
+    where clue_id = #{id}
+  </delete>
+  <delete id="deleteById">
+    update t_clue_remark
+    set deleted = 1
+    where id = #{id}
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.fzdkx.yunke.bean.dao.TClueRemark" useGeneratedKeys="true">
     insert into t_clue_remark (clue_id, note_way, note_content, 

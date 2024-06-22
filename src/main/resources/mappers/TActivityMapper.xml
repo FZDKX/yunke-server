@@ -68,6 +68,11 @@
           ${sqlQuery.filterSQL}
       </where>
   </select>
+  <select id="selectAllOngoingCache" resultType="com.fzdkx.yunke.bean.dao.TActivity">
+    select *
+    from t_activity
+    where start_time &lt; now() and end_time &gt; now()
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_activity
     where id = #{id,jdbcType=INTEGER}

@@ -7,6 +7,21 @@
     <result column="type_name" jdbcType="VARCHAR" property="typeName" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
+
+  <resultMap id="DicVOMap" type="com.fzdkx.yunke.bean.vo.DicTypeVO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="type_code" jdbcType="VARCHAR" property="typeCode" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <!-- 一对多 集合-->
+    <collection property="values" ofType="com.fzdkx.yunke.bean.dao.TDicValue">
+      <id column="vid" property="id"/>
+      <result column="vcode" property="typeCode"/>
+      <result column="vvalue" property="typeValue"/>
+      <result column="order" property="order"/>
+      <result column="vremark" property="remark"/>
+    </collection>
+  </resultMap>
   <sql id="Base_Column_List">
     id, type_code, type_name, remark
   </sql>
@@ -15,6 +30,11 @@
     <include refid="Base_Column_List" />
     from t_dic_type
     where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllDicDataByCache" resultMap="DicVOMap">
+    select tdt.* , tdv.id vid , tdv.type_code vcode , tdv.type_value vvalue , tdv.`order` , tdv.remark vremark
+    from t_dic_type tdt
+    left join t_dic_value tdv on tdt.type_code = tdv.type_code
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_dic_type

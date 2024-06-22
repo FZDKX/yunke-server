@@ -160,7 +160,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result<List<TUser>> queryAllOwner() {
+    public List<TUser> queryAllOwner() {
         List<TUser> ownerList = CacheUtils.getCacheData(() -> {  // 从缓存中查询数据
             return redisManager.getListValue(RedisConstant.OWNER_PREFIX, TUser.class);
         }, () -> { // 从数据库中查询数据
@@ -169,6 +169,6 @@ public class UserServiceImpl implements UserService {
             redisManager.setListValue(RedisConstant.OWNER_PREFIX, data);
             redisManager.setExpireTime(RedisConstant.OWNER_PREFIX, RedisConstant.DEFAULT_EXPIRE_TIME, TimeUnit.SECONDS);
         });
-        return Result.success(ownerList);
+        return ownerList;
     }
 }
