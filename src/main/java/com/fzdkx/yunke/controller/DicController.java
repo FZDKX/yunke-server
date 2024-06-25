@@ -30,4 +30,10 @@ public class DicController {
         DicVO clueDic = dicService.getClueRemarkDic();
         return Result.success(clueDic);
     }
+
+    @GetMapping("/customer")
+    public Result<DicVO> getCustomerDic() {
+        DicVO dicVO = dicService.getCustomerDic();
+        return Result.success(dicVO);
+    }
 }

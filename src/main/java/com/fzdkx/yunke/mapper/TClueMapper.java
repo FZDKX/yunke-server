@@ -24,4 +24,5 @@ public interface TClueMapper {
     void batchInsert(@Param("list") List<TClue> cachedDataList);
 
     ClueVO selectClueVO(Integer id);
+
 }

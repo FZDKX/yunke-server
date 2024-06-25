@@ -26,6 +26,11 @@ public class TCustomer implements Serializable {
     private Integer product;
 
     /**
+     * 意向状态
+     */
+    private Integer intentionState;
+
+    /**
      * 客户描述
      */
     private String description;

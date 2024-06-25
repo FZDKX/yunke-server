@@ -22,10 +22,27 @@
     from t_customer_remark
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectListByCustomerId" resultType="com.fzdkx.yunke.bean.vo.CustomerRemarkVO">
+      select tcr.*, tu1.name createName, tu2.name editName, tdv.type_value noteWayName
+      from t_customer_remark tcr
+               left join t_user tu1 on tcr.create_by = tu1.id
+               left join t_user tu2 on tcr.edit_by = tu2.id
+               left join t_dic_value tdv on tcr.note_way = tdv.id
+      where tcr.customer_id = #{customerId} and tcr.deleted = 0
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_customer_remark
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <delete id="deleteByCustomerId">
+    delete from t_customer_remark
+    where customer_id = #{id}
+  </delete>
+  <update id="deleteById">
+      update t_customer_remark
+      set deleted = 1
+      where id = #{id}
+  </update>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.fzdkx.yunke.bean.dao.TCustomerRemark" useGeneratedKeys="true">
     insert into t_customer_remark (customer_id, note_way, note_content, 
       create_by, create_time, edit_time, 

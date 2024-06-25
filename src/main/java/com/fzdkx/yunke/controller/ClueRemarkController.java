@@ -1,8 +1,6 @@
 package com.fzdkx.yunke.controller;
 
-import com.fzdkx.yunke.bean.dao.TActivityRemark;
 import com.fzdkx.yunke.bean.dao.TClueRemark;
-import com.fzdkx.yunke.bean.vo.ActivityRemarkVO;
 import com.fzdkx.yunke.bean.vo.ClueRemarkVO;
 import com.fzdkx.yunke.common.Result;
 import com.fzdkx.yunke.service.ClueRemarkService;
@@ -32,12 +30,12 @@ public class ClueRemarkController {
     }
 
     @PutMapping()
-    public Result<TClueRemark> editRemark(@RequestBody TClueRemark tClueRemark) {
+    public Result<String> editRemark(@RequestBody TClueRemark tClueRemark) {
         return clueRemarkService.editRemark(tClueRemark);
     }
 
     @PostMapping()
-    public Result<TClueRemark> addRemark(@RequestBody TClueRemark tClueRemark) {
+    public Result<String> addRemark(@RequestBody TClueRemark tClueRemark) {
         return clueRemarkService.addRemark(tClueRemark);
     }
 

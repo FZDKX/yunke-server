@@ -16,9 +16,9 @@ public interface ClueRemarkService {
 
     Result<TClueRemark> getRemark(Integer id);
 
-    Result<TClueRemark> editRemark(TClueRemark tClueRemark);
+    Result<String> editRemark(TClueRemark tClueRemark);
 
-    Result<TClueRemark> addRemark(TClueRemark tClueRemark);
+    Result<String> addRemark(TClueRemark tClueRemark);
 
     Result<String> deleteRemark(Integer id);
 }

@@ -63,4 +63,21 @@ public class DicServiceImpl implements DicService {
                 .build();
         return dicVO;
     }
+
+    @Override
+    public DicVO getCustomerDic() {
+        Map<String, Object> map = YunKeApplication.cacheMap;
+        DicVO dicVO;
+        // 从数据中获取
+        if (map.isEmpty()) {
+            cacheTask.setCacheData();
+        }
+        dicVO = DicVO.builder()
+                .intentionProductList((List<TProduct>) map.get(DictionaryConstant.INTENTION_PRODUCT))
+                .intentionStateList((List<TDicValue>) map.get(DictionaryConstant.INTENTION_STATE))
+                .build();
+        return dicVO;
+    }
+
+
 }

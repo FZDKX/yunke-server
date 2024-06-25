@@ -40,7 +40,7 @@ public class ClueRemarkServiceImpl implements ClueRemarkService {
     }
 
     @Override
-    public Result<TClueRemark> editRemark(TClueRemark tClueRemark) {
+    public Result<String> editRemark(TClueRemark tClueRemark) {
         if (tClueRemark != null && tClueRemark.getId() != null) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             LoginUser loginUser = (LoginUser) authentication.getPrincipal();
@@ -55,7 +55,7 @@ public class ClueRemarkServiceImpl implements ClueRemarkService {
     }
 
     @Override
-    public Result<TClueRemark> addRemark(TClueRemark tClueRemark) {
+    public Result<String> addRemark(TClueRemark tClueRemark) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         // 设置跟踪人

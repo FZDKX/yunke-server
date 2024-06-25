@@ -32,10 +32,8 @@ public class ClueServiceImpl implements ClueService {
 
     @Resource
     private TClueMapper tClueMapper;
-
     @Resource
     private TClueRemarkMapper tClueRemarkMapper;
-
     @Resource
     private DicService dicService;
 
@@ -91,6 +89,8 @@ public class ClueServiceImpl implements ClueService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         tClue.setEditTime(new Date());
         tClue.setEditBy(((LoginUser) authentication.getPrincipal()).getTUser().getId());
+        // 修改客户表信息
+
         tClueMapper.updateByPrimaryKeySelective(tClue);
     }
 

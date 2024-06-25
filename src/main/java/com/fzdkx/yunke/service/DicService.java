@@ -10,4 +10,6 @@ public interface DicService {
     DicVO getClueDic();
 
     DicVO getClueRemarkDic();
+
+    DicVO getCustomerDic();
 }

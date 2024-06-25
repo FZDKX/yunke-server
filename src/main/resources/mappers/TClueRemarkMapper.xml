@@ -28,7 +28,7 @@
     left join t_user tu1 on tcr.create_by = tu1.id
     left join t_user tu2 on tcr.edit_by = tu2.id
     left join t_dic_value tdv on tcr.note_way = tdv.id
-    where deleted = 0
+    where deleted = 0 and tcr.clue_id = #{clueId}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_clue_remark
