@@ -21,12 +21,13 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
     <select id="selectListByActivityId" resultType="com.fzdkx.yunke.bean.vo.ActivityRemarkVO">
-        select tar.* , tu1.name createName , tu2.name editName
+        select tar.*, tu1.name createName, tu2.name editName
         from t_activity_remark tar
-        left join t_activity ta on ta.id = tar.activity_id
-        left join t_user tu1 on tar.create_by = tu1.id
-        left join t_user tu2 on tar.edit_by = tu2.id
-        where tar.activity_id = #{id} and tar.deleted = 0
+                 left join t_activity ta on ta.id = tar.activity_id
+                 left join t_user tu1 on tar.create_by = tu1.id
+                 left join t_user tu2 on tar.edit_by = tu2.id
+        where tar.activity_id = #{id}
+          and tar.deleted = 0
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete

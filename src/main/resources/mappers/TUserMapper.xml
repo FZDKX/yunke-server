@@ -55,10 +55,10 @@
     <select id="selectUserList" resultMap="UserListMap">
         # 查询用户列表，并携带用户角色信息
         SELECT tu.*,
-               tr.role_name roleName , tr.id rid , tr.role
+        tr.role_name roleName , tr.id rid , tr.role
         FROM t_user tu
-                 LEFT JOIN t_user_role tur ON tu.id = tur.user_id
-                 LEFT JOIN t_role tr ON tur.role_id = tr.id
+        LEFT JOIN t_user_role tur ON tu.id = tur.user_id
+        LEFT JOIN t_role tr ON tur.role_id = tr.id
         <where>
             ${sqlQuery.filterSQL}
         </where>
@@ -73,7 +73,9 @@
     <select id="selectUserAndRole" resultMap="UserListMap">
         # 查询具有用户信息，并携带用户角色信息
         SELECT tu.*,
-               tr.role_name roleName , tr.id rid , tr.role
+               tr.role_name roleName,
+               tr.id        rid,
+               tr.role
         FROM t_user tu
                  LEFT JOIN t_user_role tur ON tu.id = tur.user_id
                  LEFT JOIN t_role tr ON tur.role_id = tr.id

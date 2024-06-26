@@ -1,8 +1,6 @@
 package com.fzdkx.yunke.service;
 
-import com.fzdkx.yunke.bean.dao.TActivityRemark;
 import com.fzdkx.yunke.bean.dao.TClueRemark;
-import com.fzdkx.yunke.bean.vo.ActivityRemarkVO;
 import com.fzdkx.yunke.bean.vo.ClueRemarkVO;
 import com.fzdkx.yunke.common.Result;
 import com.github.pagehelper.PageInfo;

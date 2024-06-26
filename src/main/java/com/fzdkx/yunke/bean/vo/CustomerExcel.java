@@ -1,6 +1,7 @@
 package com.fzdkx.yunke.bean.vo;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.fzdkx.yunke.config.converter.CustomerStateConverter;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -46,4 +47,6 @@ public class CustomerExcel {
     private String description;
     @ExcelProperty("下次联系时间")
     private Date nextContactTime;
+    @ExcelProperty(value = "线索状态", converter = CustomerStateConverter.class)
+    private Integer state;
 }

@@ -5,7 +5,6 @@ import com.alibaba.excel.metadata.GlobalConfiguration;
 import com.alibaba.excel.metadata.data.ReadCellData;
 import com.alibaba.excel.metadata.property.ExcelContentProperty;
 import com.fzdkx.yunke.YunKeApplication;
-import com.fzdkx.yunke.bean.dao.TDicValue;
 import com.fzdkx.yunke.bean.dao.TProduct;
 import com.fzdkx.yunke.common.DictionaryConstant;
 

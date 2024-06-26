@@ -25,4 +25,5 @@ public class DicVO {
     private List<TUser> ownerList;
     private List<TActivity> activityList;
     private List<TDicValue> noteWayList;
+    private List<TDicValue> stageList;
 }

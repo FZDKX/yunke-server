@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     @GetMapping("/auto")
-    public Result<String> autoLogin(){
+    public Result<String> autoLogin() {
         return Result.success();
     }
 }

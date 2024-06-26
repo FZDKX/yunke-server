@@ -25,9 +25,9 @@ public class DicController {
         return Result.success(clueDic);
     }
 
-    @GetMapping("/clueRemark")
-    public Result<DicVO> getClueRemarkDic() {
-        DicVO clueDic = dicService.getClueRemarkDic();
+    @GetMapping("/remark")
+    public Result<DicVO> getRemarkDic() {
+        DicVO clueDic = dicService.getRemarkDic();
         return Result.success(clueDic);
     }
 
@@ -35,5 +35,11 @@ public class DicController {
     public Result<DicVO> getCustomerDic() {
         DicVO dicVO = dicService.getCustomerDic();
         return Result.success(dicVO);
+    }
+
+    @GetMapping("/stage")
+    public Result<DicVO> getStage() {
+        DicVO dicVOList = dicService.getStageList();
+        return Result.success(dicVOList);
     }
 }

@@ -18,7 +18,7 @@ public interface TUserRoleMapper {
 
     int updateByPrimaryKey(TUserRole record);
 
-    void insertList(@Param("roleIds") List<Integer> roleIds,@Param("userId") Integer id);
+    void insertList(@Param("roleIds") List<Integer> roleIds, @Param("userId") Integer id);
 
     void deleteByUserId(Integer id);
 }

@@ -42,36 +42,24 @@
 
     <select id="selectMenuByUserId" resultMap="PermissionVOMap">
         # 查询用户所有的菜单权限，父子关系查询
-        SELECT
-            t1.*,
-            t2.id cid,
-            t2.NAME cname,
-            t2.url curl,
-            t2.icon cicon
-        FROM
-            (
-                SELECT DISTINCT
-                    tp.*
-                FROM
-                    t_permission tp
-                        LEFT JOIN t_role_permission trp ON tp.id = trp.permission_id
-                        LEFT JOIN t_user_role tur ON tur.role_id = trp.role_id
-                WHERE
-                    tur.user_id = #{userId}
-                  AND tp.type = 'menu'
-                  AND tp.parent_id = 0
-            ) t1
-                LEFT JOIN (
-                SELECT DISTINCT
-                    tp.*
-                FROM
-                    t_permission tp
-                        LEFT JOIN t_role_permission trp ON tp.id = trp.permission_id
-                        LEFT JOIN t_user_role tur ON tur.role_id = trp.role_id
-                WHERE
-                    tur.user_id = #{userId}
-                  AND tp.type = 'menu'
-            ) t2 ON t1.id = t2.parent_id
+        SELECT t1.*,
+               t2.id   cid,
+               t2.NAME cname,
+               t2.url  curl,
+               t2.icon cicon
+        FROM (SELECT DISTINCT tp.*
+              FROM t_permission tp
+                       LEFT JOIN t_role_permission trp ON tp.id = trp.permission_id
+                       LEFT JOIN t_user_role tur ON tur.role_id = trp.role_id
+              WHERE tur.user_id = #{userId}
+                AND tp.type = 'menu'
+                AND tp.parent_id = 0) t1
+                 LEFT JOIN (SELECT DISTINCT tp.*
+                            FROM t_permission tp
+                                     LEFT JOIN t_role_permission trp ON tp.id = trp.permission_id
+                                     LEFT JOIN t_user_role tur ON tur.role_id = trp.role_id
+                            WHERE tur.user_id = #{userId}
+                              AND tp.type = 'menu') t2 ON t1.id = t2.parent_id
     </select>
 
     <select id="selectChildren" resultType="com.fzdkx.yunke.bean.vo.PermissionListVo">

@@ -1,8 +1,6 @@
 package com.fzdkx.yunke.service.impl;
 
 import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
 import com.fzdkx.yunke.bean.dao.LoginUser;
 import com.fzdkx.yunke.bean.dao.TClue;
 import com.fzdkx.yunke.bean.dao.TCustomer;
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

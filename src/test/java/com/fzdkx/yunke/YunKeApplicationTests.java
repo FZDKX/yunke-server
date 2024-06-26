@@ -1,16 +1,14 @@
 package com.fzdkx.yunke;
 
-import com.fzdkx.yunke.bean.dao.TUser;
-import com.fzdkx.yunke.mapper.TUserMapper;
-import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.UUID;
+
 @SpringBootTest
 class YunKeApplicationTests {
-
 
 
     @Test
@@ -20,4 +18,11 @@ class YunKeApplicationTests {
 
     }
 
+    @Test
+    void uuidTest() {
+        UUID uuid = UUID.randomUUID();
+        String uuidStr = uuid.toString().replaceAll("-", "");
+        System.out.println(uuidStr);
+
+    }
 }

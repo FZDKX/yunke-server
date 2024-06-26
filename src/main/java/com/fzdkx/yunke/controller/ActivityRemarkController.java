@@ -40,7 +40,7 @@ public class ActivityRemarkController {
     }
 
     @DeleteMapping("/{id}")
-    public Result<String> deleteRemark(@PathVariable("id") Integer id){
+    public Result<String> deleteRemark(@PathVariable("id") Integer id) {
         return activityRemarkService.deleteRemark(id);
     }
 }

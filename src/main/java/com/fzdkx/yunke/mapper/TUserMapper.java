@@ -24,7 +24,7 @@ public interface TUserMapper {
 
     TUser selectByUsername(String username);
 
-    @DataScope(tableAlias = "tu" , tableField = "id" , needPermission = "user:all")
+    @DataScope(tableAlias = "tu", tableField = "id", needPermission = "user:all")
     List<UserVO> selectUserList(@Param("sqlQuery") SQLQuery sqlQuery);
 
     UserDetailsVO selectUserDetails(Integer id);

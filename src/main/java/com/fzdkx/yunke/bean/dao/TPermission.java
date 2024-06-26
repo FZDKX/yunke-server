@@ -1,7 +1,8 @@
 package com.fzdkx.yunke.bean.dao;
 
-import java.io.Serializable;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 权限表

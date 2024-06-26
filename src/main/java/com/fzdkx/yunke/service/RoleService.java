@@ -18,6 +18,7 @@ public interface RoleService {
     Result<PageInfo<TRole>> getListByPage(Integer pageSize, Integer pageNum);
 
     Result<List<PermAllVO>> getRolePerm(Integer id);
+
     PermAllVO convert(List<PermissionQuery> list, int curId);
 
     Result<AllPermAndRoleVO> queryUserDetail(Integer id);

@@ -20,6 +20,6 @@ public class DicTypeServiceImpl implements DicTypeService {
 
     @Override
     public List<DicTypeVO> loadAllDicDataByCache() {
-        return  tDicTypeMapper.selectAllDicDataByCache();
+        return tDicTypeMapper.selectAllDicDataByCache();
     }
 }

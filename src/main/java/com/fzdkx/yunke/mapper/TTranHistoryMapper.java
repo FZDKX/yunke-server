@@ -1,6 +1,10 @@
 package com.fzdkx.yunke.mapper;
 
 import com.fzdkx.yunke.bean.dao.TTranHistory;
+import com.fzdkx.yunke.bean.vo.TranHistoryVO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface TTranHistoryMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +18,8 @@ public interface TTranHistoryMapper {
     int updateByPrimaryKeySelective(TTranHistory record);
 
     int updateByPrimaryKey(TTranHistory record);
+
+    List<TranHistoryVO> selectByTranId(@Param("tranId") Integer tranId);
+
+    void deleteByTranId(Integer id);
 }

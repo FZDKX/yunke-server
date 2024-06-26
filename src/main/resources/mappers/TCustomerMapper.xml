@@ -12,6 +12,7 @@
         <result column="edit_time" jdbcType="TIMESTAMP" property="editTime"/>
         <result column="edit_by" jdbcType="INTEGER" property="editBy"/>
         <result column="intention_state" jdbcType="INTEGER" property="intentionState"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
     </resultMap>
 
     <resultMap id="CustomerVOMap" type="com.fzdkx.yunke.bean.vo.CustomerVO">
@@ -27,9 +28,10 @@
         <result column="intention_state" jdbcType="INTEGER" property="intentionState"/>
         <result column="productName" property="productName"/>
         <result property="intentionStateName" column="intentionStateName"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
 
         <association property="clueVO" javaType="com.fzdkx.yunke.bean.vo.ClueVO">
-            <id property="id" column="cid" />
+            <id property="id" column="cid"/>
             <result property="ownerName" column="ownerName"/>
             <result property="appellationStr" column="appellationStr"/>
             <result property="needLoanStr" column="needLoanStr"/>
@@ -47,7 +49,7 @@
 
     <sql id="Base_Column_List">
         id, clue_id, product, description, next_contact_time, create_time, create_by, edit_time,
-            intention_state , edit_by
+            intention_state , edit_by , state
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -56,46 +58,42 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
     <select id="selectList" resultMap="CustomerVOMap">
-        SELECT
-            tc1.*,
-            tc.id cid,
-            tp.`name` productName,
-            temp.ownerName,
-            temp.appellationStr,
-            temp.needLoanStr,
-            temp.full_name fullName,
-            temp.phone,
-            temp.weixin,
-            temp.qq,
-            temp.email,
-            temp.age,
-            temp.job,
-            temp.year_income yearIncome,
-            temp.address,
-            temp.intentionStateName
-        FROM
-            t_customer tc1
-                LEFT JOIN (
-                SELECT
-                    tc.*,
-                    tu.NAME ownerName,
-                    tdv1.type_value appellationStr,
-                    tdv2.type_value needLoanStr,
-                    tdv3.type_value intentionStateName
-                FROM
-                    t_clue tc
-                        LEFT JOIN t_user tu ON tc.owner_id = tu.id
-                        LEFT JOIN t_dic_value tdv1 ON tc.appellation = tdv1.id
-                        LEFT JOIN t_dic_value tdv2 ON tc.need_loan = tdv2.id
-                        LEFT JOIN t_dic_value tdv3 ON tc.intention_state = tdv3.id
-            ) temp ON tc1.clue_id = temp.id
-                LEFT JOIN t_product tp ON tc1.product = tp.id
-                LEFT JOIN t_clue tc ON tc.id = tc1.clue_id
+        SELECT tc1.*,
+               tc.id            cid,
+               tp.`name`        productName,
+               temp.ownerName,
+               temp.appellationStr,
+               temp.needLoanStr,
+               temp.full_name   fullName,
+               temp.phone,
+               temp.weixin,
+               temp.qq,
+               temp.email,
+               temp.age,
+               temp.job,
+               temp.year_income yearIncome,
+               temp.address,
+               temp.intentionStateName
+        FROM t_customer tc1
+                 LEFT JOIN (SELECT tc.*,
+                                   tu.NAME         ownerName,
+                                   tdv1.type_value appellationStr,
+                                   tdv2.type_value needLoanStr,
+                                   tdv3.type_value intentionStateName
+                            FROM t_clue tc
+                                     LEFT JOIN t_user tu ON tc.owner_id = tu.id
+                                     LEFT JOIN t_dic_value tdv1 ON tc.appellation = tdv1.id
+                                     LEFT JOIN t_dic_value tdv2 ON tc.need_loan = tdv2.id
+                                     LEFT JOIN t_dic_value tdv3 ON tc.intention_state = tdv3.id) temp
+                           ON tc1.clue_id = temp.id
+                 LEFT JOIN t_product tp ON tc1.product = tp.id
+                 LEFT JOIN t_clue tc ON tc.id = tc1.clue_id
     </select>
     <select id="selectExcel" resultType="com.fzdkx.yunke.bean.vo.CustomerExcel">
         SELECT
         tc1.next_contact_time,
         tc1.description,
+        tc1.state,
         tp.`name` productName,
         temp.ownerName,
         temp.appellationName,
@@ -146,10 +144,11 @@
             useGeneratedKeys="true">
         insert into t_customer (clue_id, product, description,
                                 next_contact_time, create_time, create_by,
-                                edit_time, edit_by , intention_state)
+                                edit_time, edit_by, intention_state, state)
         values (#{clueId,jdbcType=INTEGER}, #{product,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR},
                 #{nextContactTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER},
-                #{editTime,jdbcType=TIMESTAMP}, #{editBy,jdbcType=INTEGER} ,  #{intentionState,jdbcType=INTEGER})
+                #{editTime,jdbcType=TIMESTAMP}, #{editBy,jdbcType=INTEGER}, #{intentionState,jdbcType=INTEGER},
+                #{state,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.fzdkx.yunke.bean.dao.TCustomer"
             useGeneratedKeys="true">
@@ -182,6 +181,9 @@
             <if test="intentionState != null">
                 intention_state,
             </if>
+            <if test="state != null">
+                state,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="clueId != null">
@@ -210,6 +212,9 @@
             </if>
             <if test="intentionState != null">
                 #{intentionState,jdbcType=INTEGER},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -243,6 +248,9 @@
             <if test="intentionState != null">
                 intention_state = #{intentionState,jdbcType=INTEGER},
             </if>
+            <if test="state != null">
+                state = #{state,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -256,7 +264,8 @@
             create_by         = #{createBy,jdbcType=INTEGER},
             edit_time         = #{editTime,jdbcType=TIMESTAMP},
             edit_by           = #{editBy,jdbcType=INTEGER},
-            intention_state   = #{intentionState,jdbcType=INTEGER}
+            intention_state   = #{intentionState,jdbcType=INTEGER},
+            state             = #{state,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

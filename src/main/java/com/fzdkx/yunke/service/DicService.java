@@ -9,7 +9,9 @@ import com.fzdkx.yunke.bean.vo.DicVO;
 public interface DicService {
     DicVO getClueDic();
 
-    DicVO getClueRemarkDic();
+    DicVO getRemarkDic();
 
     DicVO getCustomerDic();
+
+    DicVO getStageList();
 }

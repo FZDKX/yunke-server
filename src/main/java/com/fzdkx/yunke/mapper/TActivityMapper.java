@@ -22,7 +22,7 @@ public interface TActivityMapper {
 
     int updateByPrimaryKey(TActivity record);
 
-    @DataScope(tableAlias = "ta", tableField = "owner_id" , needPermission = "activity:all")
+    @DataScope(tableAlias = "ta", tableField = "owner_id", needPermission = "activity:all")
     List<ActivityVO> selectFilterList(@Param("sqlQuery") SQLQuery sqlQuery, @Param("query") ActivitySearchQuery query);
 
     int batchDeleteByIds(List<Integer> ids);

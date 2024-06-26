@@ -51,7 +51,7 @@ public class DicServiceImpl implements DicService {
     }
 
     @Override
-    public DicVO getClueRemarkDic() {
+    public DicVO getRemarkDic() {
         Map<String, Object> map = YunKeApplication.cacheMap;
         DicVO dicVO;
         // 从数据中获取
@@ -75,6 +75,20 @@ public class DicServiceImpl implements DicService {
         dicVO = DicVO.builder()
                 .intentionProductList((List<TProduct>) map.get(DictionaryConstant.INTENTION_PRODUCT))
                 .intentionStateList((List<TDicValue>) map.get(DictionaryConstant.INTENTION_STATE))
+                .build();
+        return dicVO;
+    }
+
+    @Override
+    public DicVO getStageList() {
+        Map<String, Object> map = YunKeApplication.cacheMap;
+        DicVO dicVO;
+        // 从数据中获取
+        if (map.isEmpty()) {
+            cacheTask.setCacheData();
+        }
+        dicVO = DicVO.builder()
+                .stageList((List<TDicValue>) map.get(DictionaryConstant.STAGE))
                 .build();
         return dicVO;
     }

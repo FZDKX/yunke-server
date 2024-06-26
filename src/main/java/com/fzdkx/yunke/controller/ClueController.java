@@ -45,7 +45,7 @@ public class ClueController {
     }
 
     @PutMapping
-    public Result<String> editClue(@RequestBody TClue clue){
+    public Result<String> editClue(@RequestBody TClue clue) {
         clueService.editClue(clue);
         return Result.success();
     }

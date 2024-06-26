@@ -87,7 +87,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public Result<String> batchDeleteActivity(IdListVO idListVO) {
-        if(idListVO == null || ObjectUtils.isEmpty(idListVO.getIds())){
+        if (idListVO == null || ObjectUtils.isEmpty(idListVO.getIds())) {
             return Result.success();
         }
         // 批量删除备注

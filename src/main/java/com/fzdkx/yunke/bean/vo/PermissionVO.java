@@ -12,6 +12,6 @@ import java.util.List;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PermissionVO extends TPermission{
+public class PermissionVO extends TPermission {
     private List<TPermission> children;
 }

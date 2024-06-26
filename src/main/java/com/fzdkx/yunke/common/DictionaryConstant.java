@@ -13,7 +13,7 @@ public class DictionaryConstant {
     public static final String RETURN_PRIORITY = "returnPriority";
     public static final String RETURN_STATE = "returnState";
     public static final String SOURCE = "source";
-        public static final String STAGE = "stage";
+    public static final String STAGE = "stage";
     public static final String TRANSACTION_TYPE = "transactionType";
     public static final String INTENTION_STATE = "intentionState";
     public static final String NEED_LOAN = "needLoan";
@@ -23,4 +23,10 @@ public class DictionaryConstant {
 
     public static final String INTENTION_PRODUCT = "intentionProduct";
     public static final String ACTIVITY = "activity";
+
+    // 初始交易状态
+    public static final Integer TRAN_INIT = 12;
+
+    // 删除交易后的客户状态
+    public static final Integer DELETE_TRAN = 0;
 }

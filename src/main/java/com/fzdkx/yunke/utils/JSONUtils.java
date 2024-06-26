@@ -26,7 +26,7 @@ public class JSONUtils {
 
     public static <T> T toBean(String json, Class<T> clazz) {
         try {
-            return OBJECT_MAPPER.readValue(json,clazz);
+            return OBJECT_MAPPER.readValue(json, clazz);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

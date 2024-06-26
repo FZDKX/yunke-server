@@ -1,96 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fzdkx.yunke.mapper.TDicTypeMapper">
-  <resultMap id="BaseResultMap" type="com.fzdkx.yunke.bean.dao.TDicType">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="type_code" jdbcType="VARCHAR" property="typeCode" />
-    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.fzdkx.yunke.bean.dao.TDicType">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="type_code" jdbcType="VARCHAR" property="typeCode"/>
+        <result column="type_name" jdbcType="VARCHAR" property="typeName"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
 
-  <resultMap id="DicVOMap" type="com.fzdkx.yunke.bean.vo.DicTypeVO">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="type_code" jdbcType="VARCHAR" property="typeCode" />
-    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <!-- 一对多 集合-->
-    <collection property="values" ofType="com.fzdkx.yunke.bean.dao.TDicValue">
-      <id column="vid" property="id"/>
-      <result column="vcode" property="typeCode"/>
-      <result column="vvalue" property="typeValue"/>
-      <result column="order" property="order"/>
-      <result column="vremark" property="remark"/>
-    </collection>
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, type_code, type_name, remark
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from t_dic_type
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <select id="selectAllDicDataByCache" resultMap="DicVOMap">
-    select tdt.* , tdv.id vid , tdv.type_code vcode , tdv.type_value vvalue , tdv.`order` , tdv.remark vremark
-    from t_dic_type tdt
-    left join t_dic_value tdv on tdt.type_code = tdv.type_code
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from t_dic_type
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.fzdkx.yunke.bean.dao.TDicType" useGeneratedKeys="true">
-    insert into t_dic_type (type_code, type_name, remark
-      )
-    values (#{typeCode,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
-      )
-  </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.fzdkx.yunke.bean.dao.TDicType" useGeneratedKeys="true">
-    insert into t_dic_type
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="typeCode != null">
-        type_code,
-      </if>
-      <if test="typeName != null">
-        type_name,
-      </if>
-      <if test="remark != null">
-        remark,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="typeCode != null">
-        #{typeCode,jdbcType=VARCHAR},
-      </if>
-      <if test="typeName != null">
-        #{typeName,jdbcType=VARCHAR},
-      </if>
-      <if test="remark != null">
-        #{remark,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.fzdkx.yunke.bean.dao.TDicType">
-    update t_dic_type
-    <set>
-      <if test="typeCode != null">
-        type_code = #{typeCode,jdbcType=VARCHAR},
-      </if>
-      <if test="typeName != null">
-        type_name = #{typeName,jdbcType=VARCHAR},
-      </if>
-      <if test="remark != null">
-        remark = #{remark,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.fzdkx.yunke.bean.dao.TDicType">
-    update t_dic_type
-    set type_code = #{typeCode,jdbcType=VARCHAR},
-      type_name = #{typeName,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+    <resultMap id="DicVOMap" type="com.fzdkx.yunke.bean.vo.DicTypeVO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="type_code" jdbcType="VARCHAR" property="typeCode"/>
+        <result column="type_name" jdbcType="VARCHAR" property="typeName"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <!-- 一对多 集合-->
+        <collection property="values" ofType="com.fzdkx.yunke.bean.dao.TDicValue">
+            <id column="vid" property="id"/>
+            <result column="vcode" property="typeCode"/>
+            <result column="vvalue" property="typeValue"/>
+            <result column="order" property="order"/>
+            <result column="vremark" property="remark"/>
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, type_code, type_name, remark
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_dic_type
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectAllDicDataByCache" resultMap="DicVOMap">
+        select tdt.*, tdv.id vid, tdv.type_code vcode, tdv.type_value vvalue, tdv.`order`, tdv.remark vremark
+        from t_dic_type tdt
+                 left join t_dic_value tdv on tdt.type_code = tdv.type_code
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_dic_type
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.fzdkx.yunke.bean.dao.TDicType"
+            useGeneratedKeys="true">
+        insert into t_dic_type (type_code, type_name, remark)
+        values (#{typeCode,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.fzdkx.yunke.bean.dao.TDicType"
+            useGeneratedKeys="true">
+        insert into t_dic_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="typeCode != null">
+                type_code,
+            </if>
+            <if test="typeName != null">
+                type_name,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="typeCode != null">
+                #{typeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="typeName != null">
+                #{typeName,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.fzdkx.yunke.bean.dao.TDicType">
+        update t_dic_type
+        <set>
+            <if test="typeCode != null">
+                type_code = #{typeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="typeName != null">
+                type_name = #{typeName,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.fzdkx.yunke.bean.dao.TDicType">
+        update t_dic_type
+        set type_code = #{typeCode,jdbcType=VARCHAR},
+            type_name = #{typeName,jdbcType=VARCHAR},
+            remark    = #{remark,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>
