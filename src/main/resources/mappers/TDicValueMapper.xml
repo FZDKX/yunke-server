@@ -17,10 +17,26 @@
         from t_dic_value
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="selectList" resultType="com.fzdkx.yunke.bean.vo.DicValueVO">
+        select tdv.* , tdt.type_name typeName
+        from t_dic_value tdv
+        left join t_dic_type tdt on tdv.type_code = tdt.type_code
+    </select>
+    <select id="selectById" resultType="com.fzdkx.yunke.bean.vo.DicValueVO">
+        select tdv.*, tdt.type_name typeName
+        from t_dic_value tdv
+                 left join t_dic_type tdt on tdv.type_code = tdt.type_code
+        where tdv.id = #{id}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from t_dic_value
         where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByDicType">
+        delete
+        from t_dic_value
+        where type_code = #{typeCode}
     </delete>
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.fzdkx.yunke.bean.dao.TDicValue"
             useGeneratedKeys="true">

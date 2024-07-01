@@ -19,4 +19,6 @@ public interface TDicTypeMapper {
     int updateByPrimaryKey(TDicType record);
 
     List<DicTypeVO> selectAllDicDataByCache();
+
+    List<TDicType> selectList();
 }

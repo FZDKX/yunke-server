@@ -42,4 +42,5 @@ public class DicController {
         DicVO dicVOList = dicService.getStageList();
         return Result.success(dicVOList);
     }
+
 }
